@@ -28,9 +28,8 @@ public class ChatApplication extends Application {
 
     @Override
     public void start(Stage stage)throws Exception{
-        createUsername();
+//        createUsername();
 
-        Frame f = new Frame("Chat");
         BorderPane borderPane = new BorderPane();
 
         borderPane.setCenter(chatField = new TextArea());
@@ -91,11 +90,22 @@ public class ChatApplication extends Application {
         }
     }
     private void createUsername(){
+        ArrayList<String> usernames = new ArrayList<>();
+        TextField usernameEnter = new TextField("Gebruikersnaam");
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.getDialogPane().setContent(new TextField("Gebruikersnaam"));
+        alert.getDialogPane().setContent(usernameEnter);
 
         Button usernameButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
         usernameButton.setText("Zo heet ik!");
+        usernameButton.setOnAction(event -> {
+            String username = usernameEnter.getText();
+            usernames.add(username);
+            if(usernames.stream().anyMatch(p -> p.startsWith("[A-Z]"))){
+
+            }
+
+        });
 
         Button cancelButton = (Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL);
         cancelButton.setOnAction(event -> {

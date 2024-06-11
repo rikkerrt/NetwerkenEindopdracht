@@ -25,6 +25,7 @@ public class Connection {
         thread.start();
     }
     private void receiveData(){
+
         try {
             while (socket.isConnected()){
                 String message = this.reader.readLine();

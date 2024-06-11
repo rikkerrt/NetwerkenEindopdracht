@@ -23,14 +23,13 @@ public class Server {
         while (true) {
             Socket socket = serverSocket.accept();
 //
-//            if (connections.size() >= 2) {
-//                socket.close();
-//            }
-
-            Connection connection = new Connection(socket);
-
-
-            connections.add(connection);
+            if (player != null) {
+                player = new Connection(socket);
+                connections.add(player);
+            } else if (player2 != null) {
+                player2 = new Connection(socket);
+                connections.add(player2);
+            }
         }
     }
 
