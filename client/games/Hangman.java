@@ -8,16 +8,18 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Hangman {
     public List<String> hangmanWords = new ArrayList<>();
     private String wordToGuess = "";
     private String wordBuild = "";
     private TextField character = new TextField("");
-    private ArrayList<Character> guessedList = new ArrayList<>();
     private Label guessingWord = new Label();
     private VBox guessedletters = new VBox();
     private VBox amountOfLives = new VBox();
@@ -25,6 +27,7 @@ public class Hangman {
     private Label livesLabel = new Label();
     private int lives = 7;
     private Stage hangmanStage;
+    Pattern pat = Pattern.compile("^[a-z]$");
 
     public Hangman() {
         launchStage();
@@ -104,26 +107,26 @@ public class Hangman {
         character.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 playLetter(character.getCharacters().toString());
+                character.clear();
+
             }
         });
 
     }
 
     public void playLetter(String guess) {
-
         guess = guess.toLowerCase();
-        Character letter = guess.charAt(0);
+        Matcher match = pat.matcher(guess);
 
-        if (guessedList.contains(letter)) {
+        if(guess.isEmpty() || !(match.matches())) {
             return;
         }
 
         String newWord = "";
-        guessedList.add(letter);
         //check of de letter erin zit en goed geraden is
         for (int i = 0; i < wordToGuess.length(); i++) {
-            if (wordToGuess.charAt(i) == letter) {
-                newWord += letter;
+            if (wordToGuess.charAt(i) == guess.charAt(0)) {
+                newWord += guess;
             } else if (builder.charAt(i) != '_') {
                 newWord += builder.charAt(i);
             } else {
@@ -136,12 +139,10 @@ public class Hangman {
         guessingWord.setText(builder);
         if (builder.equals(wordToGuess)) {
             System.out.println("gg ez");
-            //game end
+            createDialogScreen();
         }
 
-        System.out.println("lekker bezig pik");
-
-        if (!(wordToGuess.contains(letter))) {
+        if (!(wordToGuess.contains(guess))) {
             if (wrongLetters.contains(guess)) {
             }
             lives--;
@@ -151,14 +152,13 @@ public class Hangman {
             System.out.println("noob");
         }
         if (lives == 0)
-
             createDialogScreen();
-
     }
 
     public void createDialogScreen() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.contentTextProperty().setValue("Geen levens meer!\n\nNieuwe game?");
+        alert.setHeaderText("Game over!");
+        alert.contentTextProperty().setValue("Nieuwe game?");
 
         Button restartButton = (Button) alert.getDialogPane().lookupButton(ButtonType.OK);
         restartButton.setText("Restart");
@@ -175,5 +175,4 @@ public class Hangman {
         });
         alert.showAndWait();
     }
-
 }

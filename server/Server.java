@@ -1,9 +1,4 @@
 import games.Hangman;
-import javafx.collections.ObservableArray;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
-import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -23,10 +18,10 @@ public class Server {
         while (true) {
             Socket socket = serverSocket.accept();
 //
-            if (player != null) {
+            if (player == null) {
                 player = new Connection(socket);
                 connections.add(player);
-            } else if (player2 != null) {
+            } else if (player2 == null) {
                 player2 = new Connection(socket);
                 connections.add(player2);
             }
@@ -45,14 +40,6 @@ public class Server {
         for (Connection connection : connections) {
             connection.write(message);
         }
-    }
-    public static void launchHangman(){
-        if(connections.size() >= 2) {
-            player = connections.get(0);
-            player2 = connections.get(1);
-        }
-
-        new Hangman();
     }
 
     public static void disconnect(Connection connection) {
