@@ -1,6 +1,8 @@
 import games.Hangman;
 
 import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -8,23 +10,17 @@ import java.util.ArrayList;
 
 public class Server {
     private static ArrayList<Connection> connections = new ArrayList<>();
-    private static Connection player;
-    private static Connection player2;
 
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(1234);
+        System.out.println(InetAddress.getLocalHost());
 
         while (true) {
+
             Socket socket = serverSocket.accept();
-//
-            if (player == null) {
-                player = new Connection(socket);
-                connections.add(player);
-            } else if (player2 == null) {
-                player2 = new Connection(socket);
-                connections.add(player2);
-            }
+            connections.add(new Connection(socket));
+
         }
     }
 
